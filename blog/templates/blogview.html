@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{blogs.title}}
+{% endblock %}
+
+{% block content %}
+
+<div class="container p-3">
+<div class="container p-5">
+<div class="row">
+<div class="col-9">
+<a href="/" class="btn btn-danger">Back to home</a>
+</div>
+<div class="col-3 float-end">
+<div class="dropdown text-end">
+  <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+    More Blogs
+  </button>
+  <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="dropdownMenuButton2">
+    {% for blog in blogs %}
+    <li><a class="dropdown-item active" href="/blog/{{blog.id}}">{{blog.title}}</a></li>
+    <li><hr class="dropdown-divider"></li>
+    {% endfor %}
+  </ul>
+</div>
+</div>
+</div>
+    <div class="shadow p-5 my-2">
+        <h2 class="text-center p-3">🔥🔥🤩 {{blcn.title}} 🤩🔥🔥</h2>
+        <hr>
+        <p class="container-fluid text-center p-3"><img src="{{blcn.image.url}}" alt="{{blcn.title}}" width="750px" height="500px"></p>
+        <p class="text-center">{{blcn.content}}</p>
+    </div>
+</div>
+</div>
+
+
+{% endblock %}

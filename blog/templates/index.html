@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<nav class="sticky-top navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container p-2">
+    <a class="navbar-brand" href="/">BlogApp</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-current="page" href="/">Home</a>
+          <div class="dropdown-menu dropdown-large p-3 mt-3" style="width: 950px;">
+            <div class="row">
+            {% if blogs %}
+              {% for blog in blogs %}
+                <div class="col-sm-3 text-center mx-auto my-3">
+                <img src="{{blog.image.url}}" alt="{{blog.title}}" width="170px" height="150px">
+                  <p class="mt-4">
+                  <a href="/blog/{{blog.id}}" class="btn btn-danger">{{blog.title}}</a>
+                  </p>                
+                </div>
+              {% endfor %}
+              {% else %}
+                {{error}}
+              {% endif %}
+            </div>
+          </div>
+        </li>
+        </ul>
+    </div>
+    <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link" href="#">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Signup</a>
+        </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container p-5">
+    <div class="row mx-auto">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+            {{message}}
+            </div>
+        {% endfor %}
+    {% endif %}
+        <div class="col-sm-7 mx-auto">
+    <form action="" method="post" enctype="multipart/form-data" class="p-5">
+        {% csrf_token %}
+        {% for fm in form %}
+          <div class="form-group mb-3">
+          {{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>
+          </div>
+        {% endfor %}
+        <input type="submit" value="Submit" class="btn btn-success">
+        {% if form.non_field_errors %}
+          {% for error in form.non_field_errors %}
+           <p class="alert alert-danger my-3">{{error}}</p>
+          {% endfor %}
+        {% endif %}
+    </form>
+</div>
+</div>
+</div>
+
+{% if blogs %}
+{% for blog in blogs %}
+<div class="container p-5">
+    <div class="p-5 shadow">
+        <h3 class="mb-3">{{blog.title}}</h3>
+        <a href="{% url 'blog_view' blog.id %}" class="btn btn-danger">Click to view</a>
+        <hr>
+        <p>{{blog.created_at}}</p>
+        <div class="row my-5">
+            <div class="col-sm-5">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for cm in comment %}
+                  <div class="form-group mb-3">
+                  {{cm.label_tag}} {{cm}} <small class="text-danger">{{cm.errors|striptags}}</small>
+                  </div>
+                {% endfor %}
+                <input type="submit" value="Submit" class="btn btn-success">
+                {% if comment.non_field_errors %}
+                  {% for error in comment.non_field_errors %}
+                   <p class="alert alert-danger my-3">{{error}}</p>
+                  {% endfor %}
+                {% endif %}
+            </form>
+    </div>
+    <div class="col-sm-7 p-4">
+        {% for comment in comments %}
+            <p><em>{{comment.name}}</em> | <small>{{comment.country}}</small></p>
+            <p style="color:red;"><q>{{comment.comment}}</q></p>
+            <hr>
+        {% endfor %}
+    </div>
+    </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+    {{error}}
+{% endif %}
+
+
+
+{% endblock %}
